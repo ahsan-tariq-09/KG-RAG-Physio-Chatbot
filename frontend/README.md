@@ -1,49 +1,39 @@
-KG-RAG Physical Rehabilitation Chatbot
+# **KG-RAG Physical Rehabilitation Chatbot**
 
-A Knowledge-Graph-Enhanced Retrieval Augmented Generation System for Physical Therapy Queries
+*A Knowledge-Graph-Enhanced Retrieval Augmented Generation System for Physical Therapy Queries*
 
-This project implements the backend foundation of a rehabilitation-focused chatbot based on
-Knowledge-Graph Retrieval-Augmented Generation (KG-RAG).
-It combines:
+This project implements the backend foundation of a rehabilitation-focused chatbot based on **Knowledge-Graph Retrieval-Augmented Generation (KG-RAG)**.
+It integrates:
 
-Neo4j (physical rehabilitation knowledge graph built by collaborator)
+* **Neo4j** for the rehabilitation knowledge graph (built by collaborator)
+* **Neo4j GraphRAG** for graph-aware retrieval following Microsoft’s GraphRAG principles
+* **FastAPI** as the backend API layer
+* **OpenAI GPT models** for generating answers grounded in retrieved graph evidence
 
-Neo4j GraphRAG (graph-aware retrieval following Microsoft’s GraphRAG method)
+The backend will later connect to a Streamlit frontend that visualizes subgraph evidence, enabling users to see how the system derived each answer.
 
-FastAPI backend (query endpoint)
+The current stage focuses on backend architecture, Neo4j integration, GraphRAG scaffolding, and a working `/query` endpoint that returns:
 
-OpenAI GPT models (response generation grounded in retrieved graph context)
+* an LLM-generated answer
+* an evidence subgraph (nodes + edges)
+* retrieved text context
 
-This backend will later connect to a Streamlit frontend that visualizes retrieved subgraphs and provides an interactive chat interface.
+This is consistent with the system architecture described in the project proposal.
 
-This repo currently includes:
+---
 
-Project skeleton
+## **Project Goal**
 
-Core API structure
+The primary goal is to develop a chatbot that provides **accurate and explainable answers** to questions about physical rehabilitation exercises.
+Instead of relying on plain text retrieval, the system grounds responses in **structured knowledge graph evidence**, reducing hallucinations and improving reasoning transparency.
 
-Neo4j integration
+This backend will serve as the foundation for later multimodal extensions such as CLIP embeddings, BLIP-2 captioning, FAISS similarity search, and Streamlit interface visualization.
 
-GraphRAG service scaffolding
+---
 
-Query endpoint returning:
+## **Repository Structure**
 
-LLM answer
-
-Evidence subgraph (nodes + edges)
-
-Retrieved text context
-
-This matches the backend architecture described in the proposal.
-The full multimodal pipeline (CLIP, BLIP-2, FAISS) will be added later.
-
-Project Goal
-
-To create a chatbot that answers physical rehabilitation questions using verifiable, structured evidence from a knowledge graph instead of relying purely on language-model guesses.
-
-This addresses the issue of hallucinations in traditional RAG systems and demonstrates how semantic graph structure improves accuracy, transparency, and reasoning.
-
-Repository Structure
+```
 kg-rag-physio/
   backend/
     app/
@@ -57,3 +47,4 @@ kg-rag-physio/
   frontend/
     app.py                   # Streamlit UI (future)
   README.md
+```
