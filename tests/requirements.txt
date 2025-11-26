@@ -1,0 +1,16 @@
+fastapi
+uvicorn[standard]
+pydantic>=2
+python-dotenv
+
+neo4j
+neo4j-graphrag-python
+
+openai
+
+# For later: visualization & RAG extras
+networkx
+pyvis
+streamlit
+faiss-cpu
+sentence-transformers
