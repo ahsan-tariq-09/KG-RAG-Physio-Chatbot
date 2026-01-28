@@ -1,0 +1,10 @@
+fastapi
+uvicorn[standard]
+pydantic>=2
+python-dotenv
+
+neo4j
+neo4j-graphrag
+
+sentence-transformers
+google-genai
