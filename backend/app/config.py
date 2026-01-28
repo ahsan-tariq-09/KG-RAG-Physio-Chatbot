@@ -17,7 +17,7 @@ class Settings(BaseModel):
     neo4j_database: str | None = Field(default=None)  # optional
 
     # Gemini Developer API
-    gemini_api_key: str = Field(default="")  # set in .env as GEMINI_API_KEY
+    gemini_api_key: str = Field(default="")  
     gemini_model: str = Field(default="gemini-2.5-flash")
 
     # Retrieval
