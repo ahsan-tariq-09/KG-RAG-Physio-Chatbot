@@ -4,13 +4,12 @@ pydantic>=2
 python-dotenv
 
 neo4j
-neo4j-graphrag-python
+neo4j-graphrag
 
-openai
-
-# For later: visualization & RAG extras
-networkx
-pyvis
-streamlit
-faiss-cpu
+# open-source embeddings
 sentence-transformers
+
+# Gemini Developer API SDK
+google-genai
+
+#Neo4j GraphRAG requires Python ≥ 3.10.

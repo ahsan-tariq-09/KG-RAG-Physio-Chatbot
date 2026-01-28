@@ -1,9 +1,10 @@
-from pydantic import BaseModel
-from typing import List, Optional
+from pydantic import BaseModel, Field
+from typing import List, Optional, Literal
 
 
 class QueryRequest(BaseModel):
-    query: str
+    query: str = Field(min_length=1)
+    mode: Literal["vector", "hybrid"] = "vector"
 
 
 class EvidenceNode(BaseModel):
