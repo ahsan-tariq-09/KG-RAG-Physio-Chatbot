@@ -18,7 +18,8 @@ class Settings(BaseModel):
 
     # Gemini Developer API
     gemini_api_key: str = Field(default="")  
-    gemini_model: str = Field(default="gemini-2.5-flash")
+    gemini_model: str = Field(default="models/gemini-3-flash-preview")
+
 
     # Retrieval
     vector_index_name: str = Field(default="rehab_vector_index")
