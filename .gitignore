@@ -1,0 +1,19 @@
+# Secrets
+.env
+**/.env
+
+# Virtual env
+.venv/
+**/.venv/
+
+# Python junk
+__pycache__/
+*.pyc
+
+# VS Code / IDE
+.vscode/
+.idea/
+
+# OS
+.DS_Store
+Thumbs.db
