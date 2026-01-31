@@ -8,7 +8,7 @@ It integrates:
 * **Neo4j** for the rehabilitation knowledge graph (built by collaborator)
 * **Neo4j GraphRAG** for graph-aware retrieval following Microsoft’s GraphRAG principles
 * **FastAPI** as the backend API layer
-* **OpenAI GPT models** for generating answers grounded in retrieved graph evidence
+* **Gemini 3 Flash model** for generating answers grounded in retrieved graph evidence
 
 The backend will later connect to a Streamlit frontend that visualizes subgraph evidence, enabling users to see how the system derived each answer.
 
