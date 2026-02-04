@@ -16,7 +16,7 @@ google-genai
 
 #Neo4j GraphRAG requires Python ≥ 3.10.
 
-#-----------------------------Frontend Testing Dependencies-----------------------------#
+#-----------------------------Frontend (Visualization) Dependencies-----------------------------#
 #These dependencies are only required for running frontend tests.
 
 streamlit

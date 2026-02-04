@@ -34,17 +34,35 @@ This backend will serve as the foundation for later multimodal extensions such a
 ## **Repository Structure**
 
 ```
-kg-rag-physio/
-  backend/
-    app/
-      main.py                # FastAPI entrypoint
-      config.py              # Environment & settings
-      schemas.py             # API models
-      services/
-        neo4j_client.py      # Neo4j connection + queries
-        graphrag_service.py  # GraphRAG + LLM pipeline
-    requirements.txt
-  frontend/
-    app.py                   # Streamlit UI (future)
-  README.md
+KG-RAG-PHYSIO-CHATBOT/
+│
+├── backend/
+│   ├── .venv/                     # Python virtual environment (local only)
+│   │
+│   ├── app/
+│   │   ├── main.py                # FastAPI entrypoint (starts the backend API)
+│   │   ├── config.py              # Environment variables & app configuration
+│   │   ├── schemas.py             # Request/response data models (Pydantic)
+│   │   │
+│   │   └── services/
+│   │       ├── neo4j_client.py    # Neo4j connection, driver, and queries
+│   │       └── graphrag_service.py# GraphRAG pipeline (retrieval + Gemini)
+│   │
+│   ├── .env                       # Local secrets (NOT committed)
+│   ├── .env.example               # Example env file (safe to commit)
+│   ├── list_models.py             # Utility script to list Gemini models
+│   ├── requirements.txt           # Backend dependencies
+│
+├── frontend/
+│   ├── app.py                     # Streamlit frontend (graph + QA UI)
+│   └── README.md                  # Frontend usage notes
+│
+├── tests/
+│   ├── gemini_smoke_test.py       # Gemini API connectivity test
+│   └── test_smoke.py              # Basic backend sanity tests
+│
+├── .gitignore                     # Files Git should ignore (.env, .venv, etc.)
+├── LICENSE                        # Open-source license
+├── README.md                      # Project overview & setup instructions
+├── requirements.txt               # Combined frontend + backend dependencies
 ```
