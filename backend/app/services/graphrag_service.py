@@ -280,7 +280,7 @@ Include:
     def query(self, query: str, mode: str = "vector") -> tuple[str, list[str], list[dict], list[dict]]:
         retrieved = self.retrieve(query, mode=mode)
         answer = self.generate_answer(query, retrieved)
-        answer = self._sanitize_answer(answer)
+        answer = " ".join(answer.splitlines()).strip()
         nodes, edges = self.extract_evidence_subgraph(query, retrieved)
         raw_context = [x.text for x in retrieved]
         return answer, raw_context, nodes, edges
