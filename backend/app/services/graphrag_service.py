@@ -75,13 +75,23 @@ class GraphRAGService:
 
         You may need to tweak this depending on your Neo4j schema and which properties you store.
         """
-        records, meta = raw  # RawSearchResult according to docs
+        if isinstance(raw, tuple) and len(raw) == 2:
+            records, meta = raw  # RawSearchResult according to docs
+        else:
+            records, meta = raw, {}
         items: List[RetrievedItem] = []
 
         for rec in records:
             # rec is a neo4j.Record; safest is to inspect typical keys
             # Common patterns: node properties contain 'text' or 'content' or 'chunk'
-            data = rec.data()
+            if isinstance(rec, str):
+                data = {"text": rec}
+            elif isinstance(rec, dict):
+                data = rec
+            elif hasattr(rec, "data"):
+                data = rec.data()
+            else:
+                data = {"text": str(rec)}
 
             text = None
             # Try likely fields
