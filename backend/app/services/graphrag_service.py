@@ -120,46 +120,110 @@ class GraphRAGService:
             raw = self.vector_retriever.search(query_text=query, top_k=self.top_k)
         return self._format_retrieval(raw)
 
-    def extract_evidence_subgraph(self, query: str) -> Tuple[list[dict], list[dict]]:
+    def _collect_evidence_ids(
+        self, context_items: List[RetrievedItem]
+    ) -> tuple[set[str], set[int]]:
+        element_ids: set[str] = set()
+        legacy_ids: set[int] = set()
+
+        for item in context_items:
+            if not item.metadata:
+                continue
+            data = item.metadata
+            for key in ("element_id", "elementId"):
+                val = data.get(key)
+                if isinstance(val, str) and val:
+                    element_ids.add(val)
+            for key in ("id", "node_id", "nodeId"):
+                val = data.get(key)
+                if isinstance(val, int):
+                    legacy_ids.add(val)
+            for value in data.values():
+                if hasattr(value, "element_id"):
+                    element_id = getattr(value, "element_id", None)
+                    if isinstance(element_id, str) and element_id:
+                        element_ids.add(element_id)
+                if hasattr(value, "id"):
+                    node_id = getattr(value, "id", None)
+                    if isinstance(node_id, int):
+                        legacy_ids.add(node_id)
+
+        return element_ids, legacy_ids
+
+    def extract_evidence_subgraph(
+        self, query: str, context_items: List[RetrievedItem]
+    ) -> Tuple[list[dict], list[dict]]:
         """
         TEMPORARY evidence graph extraction.
         Your collaborator’s KG schema will determine the correct Cypher.
-        This just finds nearby nodes/edges around name matches.
+        This uses retrieved evidence node IDs when available, and
+        falls back to fuzzy property matches otherwise.
         """
-        cypher = """
-        MATCH (n)-[r]-(m)
-        WHERE toLower(coalesce(n.name, '')) CONTAINS toLower($q)
-           OR toLower(coalesce(m.name, '')) CONTAINS toLower($q)
-        RETURN n, r, m
-        LIMIT 50
-        """
+        element_ids, legacy_ids = self._collect_evidence_ids(context_items)
+
+        if element_ids or legacy_ids:
+            cypher = """
+            MATCH (n)
+            WHERE ($element_ids <> [] AND elementId(n) IN $element_ids)
+               OR ($legacy_ids <> [] AND id(n) IN $legacy_ids)
+            OPTIONAL MATCH (n)-[r]-(m)
+            RETURN n, r, m
+            LIMIT 50
+            """
+            params = {"element_ids": list(element_ids), "legacy_ids": list(legacy_ids)}
+        else:
+            cypher = """
+            MATCH (n)-[r]-(m)
+            WHERE toLower(coalesce(n.name, '')) CONTAINS toLower($q)
+               OR toLower(coalesce(n.title, '')) CONTAINS toLower($q)
+               OR toLower(coalesce(n.text, '')) CONTAINS toLower($q)
+               OR toLower(coalesce(n.content, '')) CONTAINS toLower($q)
+               OR toLower(coalesce(n.chunk, '')) CONTAINS toLower($q)
+               OR toLower(coalesce(m.name, '')) CONTAINS toLower($q)
+               OR toLower(coalesce(m.title, '')) CONTAINS toLower($q)
+               OR toLower(coalesce(m.text, '')) CONTAINS toLower($q)
+               OR toLower(coalesce(m.content, '')) CONTAINS toLower($q)
+               OR toLower(coalesce(m.chunk, '')) CONTAINS toLower($q)
+            RETURN n, r, m
+            LIMIT 50
+            """
+            params = {"q": query}
+
         with self.neo4j.driver.session() as session:
-            rows = list(session.run(cypher, {"q": query}))
+            rows = list(session.run(cypher, params))
 
         nodes: dict[str, dict] = {}
         edges: list[dict] = []
 
         for row in rows:
             n = row["n"]
-            m = row["m"]
-            r = row["r"]
+            m = row.get("m")
+            r = row.get("r")
 
             for node in (n, m):
+                if node is None:
+                    continue
                 node_id = node.element_id
                 if node_id not in nodes:
                     nodes[node_id] = {
                         "id": node_id,
-                        "label": node.get("name", node_id),
+                        "label": node.get("name")
+                        or node.get("title")
+                        or node.get("text")
+                        or node.get("content")
+                        or node.get("chunk")
+                        or node_id,
                         "type": next(iter(node.labels), None),
                     }
 
-            edges.append(
-                {
-                    "source": n.element_id,
-                    "target": m.element_id,
-                    "relation": r.type,
-                }
-            )
+            if n is not None and m is not None and r is not None:
+                edges.append(
+                    {
+                        "source": n.element_id,
+                        "target": m.element_id,
+                        "relation": r.type,
+                    }
+                )
 
         return list(nodes.values()), edges
 
@@ -196,6 +260,6 @@ Include:
     def query(self, query: str, mode: str = "vector") -> tuple[str, list[str], list[dict], list[dict]]:
         retrieved = self.retrieve(query, mode=mode)
         answer = self.generate_answer(query, retrieved)
-        nodes, edges = self.extract_evidence_subgraph(query)
+        nodes, edges = self.extract_evidence_subgraph(query, retrieved)
         raw_context = [x.text for x in retrieved]
         return answer, raw_context, nodes, edges
