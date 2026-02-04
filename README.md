@@ -94,7 +94,6 @@ KG-RAG-PHYSIO-CHATBOT/
 │   │       ├── neo4j_client.py    # Neo4j connection, driver, and queries
 │   │       └── graphrag_service.py# GraphRAG pipeline (retrieval + Gemini)
 │   │
-│   ├── .env                       # Local secrets (NOT committed)
 │   ├── .env.example               # Example env file (safe to commit)
 │   ├── list_models.py             # Utility script to list Gemini models
 │   
