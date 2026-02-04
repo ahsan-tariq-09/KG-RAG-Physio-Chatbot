@@ -1,7 +1,0 @@
-streamlit
-
-pyvis
-
-networkx
-
-requests

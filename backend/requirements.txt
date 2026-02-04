@@ -1,3 +1,5 @@
+#-----------------------------Backend Dependencies-----------------------------#
+#These dependencies are required for running the backend server.
 fastapi
 uvicorn[standard]
 pydantic>=2
