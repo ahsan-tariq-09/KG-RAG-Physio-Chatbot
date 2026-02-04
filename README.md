@@ -51,7 +51,7 @@ KG-RAG-PHYSIO-CHATBOT/
 │   ├── .env                       # Local secrets (NOT committed)
 │   ├── .env.example               # Example env file (safe to commit)
 │   ├── list_models.py             # Utility script to list Gemini models
-│   ├── requirements.txt           # Backend dependencies
+│   
 │
 ├── frontend/
 │   ├── app.py                     # Streamlit frontend (graph + QA UI)
