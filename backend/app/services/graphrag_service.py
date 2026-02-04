@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import ast
+import re
 from dataclasses import dataclass
 from typing import Any, List, Tuple
 
@@ -68,6 +69,14 @@ class GraphRAGService:
         # Gemini client
         # Quickstart shows API key can be provided; environment variable GEMINI_API_KEY also works. :contentReference[oaicite:8]{index=8}
         self.gemini = genai.Client(api_key=gemini_api_key)
+
+    def _sanitize_answer(self, answer: str) -> str:
+        answer = re.sub(r"\*\*(.*?)\*\*", r"\1", answer)
+        answer = re.sub(r"^\s*[\-\*]\s+", "", answer, flags=re.MULTILINE)
+        answer = answer.replace("*", "")
+        answer = " ".join(answer.splitlines()).strip()
+        answer = re.sub(r"\s{2,}", " ", answer)
+        return answer
 
     def _format_retrieval(self, raw: Any) -> List[RetrievedItem]:
         """
@@ -271,6 +280,7 @@ Include:
     def query(self, query: str, mode: str = "vector") -> tuple[str, list[str], list[dict], list[dict]]:
         retrieved = self.retrieve(query, mode=mode)
         answer = self.generate_answer(query, retrieved)
+        answer = self._sanitize_answer(answer)
         nodes, edges = self.extract_evidence_subgraph(query, retrieved)
         raw_context = [x.text for x in retrieved]
         return answer, raw_context, nodes, edges
