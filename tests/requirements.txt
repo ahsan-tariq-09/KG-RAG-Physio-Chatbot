@@ -1,3 +1,5 @@
+#-----------------------------Backend Dependencies-----------------------------#
+#These dependencies are required for running the backend server.
 fastapi
 uvicorn[standard]
 pydantic>=2
@@ -13,3 +15,11 @@ sentence-transformers
 google-genai
 
 #Neo4j GraphRAG requires Python ≥ 3.10.
+
+#-----------------------------Frontend Testing Dependencies-----------------------------#
+#These dependencies are only required for running frontend tests.
+
+streamlit
+pyvis
+networkx
+requests
