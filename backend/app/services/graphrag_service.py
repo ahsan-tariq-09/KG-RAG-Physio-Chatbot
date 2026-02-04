@@ -80,45 +80,12 @@ class GraphRAGService:
             records, meta = raw  # RawSearchResult according to docs
         else:
             records, meta = raw, {}
-
-        if isinstance(records, dict):
-            if "items" in records:
-                meta = records.get("metadata", meta)
-                records = records.get("items", [])
-            else:
-                records = list(records.values())
-        elif isinstance(records, list) and records and isinstance(records[0], tuple):
-            record_map = dict(records)
-            if "items" in record_map and isinstance(record_map["items"], list):
-                meta = record_map.get("metadata", meta)
-                records = record_map["items"]
-
         items: List[RetrievedItem] = []
 
         for rec in records:
             # rec is a neo4j.Record; safest is to inspect typical keys
             # Common patterns: node properties contain 'text' or 'content' or 'chunk'
-            data: dict[str, Any] = {}
-            if hasattr(rec, "content"):
-                content = getattr(rec, "content")
-                metadata = getattr(rec, "metadata", None)
-                score = getattr(rec, "score", None)
-                if isinstance(content, dict):
-                    data.update(content)
-                elif isinstance(content, str):
-                    try:
-                        parsed = ast.literal_eval(content)
-                    except (ValueError, SyntaxError):
-                        parsed = None
-                    if isinstance(parsed, dict):
-                        data.update(parsed)
-                    else:
-                        data["text"] = content
-                if isinstance(metadata, dict):
-                    data.update(metadata)
-                if isinstance(score, (float, int)):
-                    data.setdefault("score", score)
-            elif isinstance(rec, str):
+            if isinstance(rec, str):
                 data = {"text": rec}
             elif isinstance(rec, dict):
                 data = rec
