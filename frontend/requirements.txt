@@ -1,0 +1,7 @@
+streamlit
+
+pyvis
+
+networkx
+
+requests
