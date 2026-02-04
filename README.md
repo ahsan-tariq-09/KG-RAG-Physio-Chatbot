@@ -1,33 +1,79 @@
 # **KG-RAG Physical Rehabilitation Chatbot**
 
-*A Knowledge-Graph-Enhanced Retrieval Augmented Generation System for Physical Therapy Queries*
+*A Knowledge-Graph-Enhanced Retrieval-Augmented Generation (KG-RAG) system for explainable physical therapy queries*
 
-This project implements the backend foundation of a rehabilitation-focused chatbot based on **Knowledge-Graph Retrieval-Augmented Generation (KG-RAG)**.
-It integrates:
+---
 
-* **Neo4j** for the rehabilitation knowledge graph (built by collaborator)
-* **Neo4j GraphRAG** for graph-aware retrieval following Microsoft’s GraphRAG principles
-* **FastAPI** as the backend API layer
-* **Gemini 3 Flash model** for generating answers grounded in retrieved graph evidence
+## **Overview**
 
-The backend will later connect to a Streamlit frontend that visualizes subgraph evidence, enabling users to see how the system derived each answer.
+This project implements the backend foundation of a **physical rehabilitation chatbot** based on **Knowledge-Graph-Enhanced Retrieval-Augmented Generation (KG-RAG)**.
 
-The current stage focuses on backend architecture, Neo4j integration, GraphRAG scaffolding, and a working `/query` endpoint that returns:
+Rather than relying solely on unstructured text retrieval, the system grounds its responses in a **Neo4j knowledge graph**, enabling **transparent, evidence-based answers** for rehabilitation and exercise-related questions.
 
-* an LLM-generated answer
-* an evidence subgraph (nodes + edges)
-* retrieved text context
+The backend exposes a `/query` API that retrieves relevant graph-backed evidence and generates responses using a large language model.
 
-This is consistent with the system architecture described in the project proposal.
+---
+
+## **Core Technologies**
+
+The current implementation integrates:
+
+- **Neo4j** — persistent storage for rehabilitation knowledge as a graph  
+- **Neo4j GraphRAG** — graph-aware retrieval following Microsoft’s GraphRAG principles  
+- **Sentence-Transformers (MiniLM)** — local open-source embeddings for semantic search  
+- **FastAPI** — backend API layer  
+- **Google Gemini (Flash models)** — LLM used to generate grounded answers  
+
+A **Streamlit frontend** will be added to visualize retrieved subgraphs and improve interpretability.
+
+---
+
+## **Current Capabilities**
+
+At its current stage, the project provides:
+
+- A working **FastAPI backend**
+- A `/query` endpoint that performs:
+  - semantic retrieval over Neo4j vector indexes
+  - graph-aware evidence aggregation
+  - LLM answer generation grounded in retrieved evidence
+- Structured responses containing:
+  - an LLM-generated answer
+  - retrieved text context
+  - placeholders for graph nodes and edges (to be visualized in the frontend)
+
+This implementation reflects the **backend architecture described in the project proposal** and serves as a stable research and development foundation.
 
 ---
 
 ## **Project Goal**
 
-The primary goal is to develop a chatbot that provides **accurate and explainable answers** to questions about physical rehabilitation exercises.
-Instead of relying on plain text retrieval, the system grounds responses in **structured knowledge graph evidence**, reducing hallucinations and improving reasoning transparency.
+The primary goal of this project is to develop an **accurate, explainable, and research-driven chatbot** for physical rehabilitation.
 
-This backend will serve as the foundation for later multimodal extensions such as CLIP embeddings, BLIP-2 captioning, FAISS similarity search, and Streamlit interface visualization.
+Key objectives include:
+
+- Reducing hallucinations by grounding answers in structured graph evidence  
+- Improving transparency by exposing the reasoning context behind each response  
+- Supporting future visualization of rehabilitation knowledge as interactive subgraphs  
+
+---
+
+## **Planned Extensions**
+
+Future development phases will include:
+
+- **Streamlit frontend** for interactive querying and graph visualization  
+- **Subgraph visualization** using NetworkX and PyVis  
+- **Multimodal extensions**, such as:
+  - CLIP-based exercise image embeddings  
+  - BLIP-2 image captioning  
+- **Advanced retrieval strategies**, including FAISS-based similarity search  
+
+---
+
+## **Research Context**
+
+This project aligns with contemporary research on **Graph-based Retrieval-Augmented Generation** and is designed to support exploratory academic research into **trustworthy and explainable AI systems** for healthcare and rehabilitation domains.
 
 ---
 
