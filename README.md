@@ -1,6 +1,6 @@
 # **KG-RAG Physical Rehabilitation Chatbot**
 
-S## A Knowledge-Graph-Enhanced Retrieval-Augmented Generation (KG-RAG) system for explainable physical therapy queries
+## A Knowledge-Graph-Enhanced Retrieval-Augmented Generation (KG-RAG) system for explainable physical therapy queries
 
 ---
 
