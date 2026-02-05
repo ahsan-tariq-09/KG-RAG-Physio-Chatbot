@@ -1,5 +1,4 @@
 import os
-import time
 import streamlit as st
 import requests
 import streamlit.components.v1 as components
@@ -17,7 +16,6 @@ API_URL = (
     else None
 ) or os.getenv("API_URL", "http://127.0.0.1:8000/query")
 
-
 # -----------------------------
 # CSS (ChatGPT-ish)
 # -----------------------------
@@ -25,9 +23,7 @@ st.markdown(
     """
 <style>
 /* Overall page background */
-[data-testid="stAppViewContainer"] {
-    background: #0b0f19;
-}
+[data-testid="stAppViewContainer"] { background: #0b0f19; }
 
 /* Hide default Streamlit menu/footer */
 #MainMenu {visibility: hidden;}
@@ -35,17 +31,8 @@ footer {visibility: hidden;}
 header {visibility: hidden;}
 
 /* Title */
-.kg-title {
-    font-size: 28px;
-    font-weight: 800;
-    color: #e8eefc;
-    margin-bottom: 0.25rem;
-}
-.kg-subtitle {
-    color: #a9b7d0;
-    margin-top: 0;
-    margin-bottom: 1rem;
-}
+.kg-title { font-size: 28px; font-weight: 800; color: #e8eefc; margin-bottom: 0.25rem; }
+.kg-subtitle { color: #a9b7d0; margin-top: 0; margin-bottom: 1rem; }
 
 /* Panels */
 .panel {
@@ -61,11 +48,7 @@ header {visibility: hidden;}
     justify-content: space-between;
     margin-bottom: 10px;
 }
-.panel-title {
-    font-size: 16px;
-    font-weight: 700;
-    color: #e8eefc;
-}
+.panel-title { font-size: 16px; font-weight: 700; color: #e8eefc; }
 .badge {
     padding: 4px 10px;
     border-radius: 999px;
@@ -76,11 +59,6 @@ header {visibility: hidden;}
 }
 
 /* Chat bubbles */
-.chat-wrap {
-    height: calc(100vh - 220px);
-    overflow-y: auto;
-    padding-right: 6px;
-}
 .bubble {
     max-width: 92%;
     padding: 10px 12px;
@@ -104,17 +82,10 @@ header {visibility: hidden;}
 }
 
 /* Typing animation */
-.typing {
-    display: inline-flex;
-    gap: 6px;
-    align-items: center;
-}
+.typing { display: inline-flex; gap: 6px; align-items: center; }
 .dot {
-    width: 6px;
-    height: 6px;
-    border-radius: 50%;
-    background: #93c5fd;
-    opacity: 0.4;
+    width: 6px; height: 6px; border-radius: 50%;
+    background: #93c5fd; opacity: 0.4;
     animation: pulse 1.2s infinite;
 }
 .dot:nth-child(2) { animation-delay: 0.2s; }
@@ -139,15 +110,10 @@ header {visibility: hidden;}
     font-weight: 700 !important;
     padding: 8px 14px !important;
 }
-.stButton > button:hover {
-    background: #1d4ed8 !important;
-}
+.stButton > button:hover { background: #1d4ed8 !important; }
 
 /* Small text */
-.muted {
-    color: #a9b7d0;
-    font-size: 12px;
-}
+.muted { color: #a9b7d0; font-size: 12px; }
 </style>
 """,
     unsafe_allow_html=True,
@@ -165,11 +131,10 @@ if "last_edges" not in st.session_state:
 if "last_mode" not in st.session_state:
     st.session_state.last_mode = "vector"
 
-
 # -----------------------------
-# Header
+# Header (REMOVED Gemini)
 # -----------------------------
-st.markdown('<div class="kg-title">KG-RAG Physio (Gemini)</div>', unsafe_allow_html=True)
+st.markdown('<div class="kg-title">KG-RAG Physio</div>', unsafe_allow_html=True)
 st.markdown(
     '<div class="kg-subtitle">Ask rehab questions. Get an answer + evidence graph.</div>',
     unsafe_allow_html=True,
@@ -181,6 +146,7 @@ st.markdown(
 left, right = st.columns([2, 3], gap="large")
 
 with left:
+    # Panel wrapper (open)
     st.markdown(
         """
         <div class="panel">
@@ -192,27 +158,36 @@ with left:
         unsafe_allow_html=True,
     )
 
-    # Display chat history
-    st.markdown('<div class="chat-wrap">', unsafe_allow_html=True)
-    for msg in st.session_state.messages:
-        role = msg.get("role", "assistant")
-        text = msg.get("text", "")
-        bubble_class = "user" if role == "user" else "assistant"
-        st.markdown(
-            f'<div class="bubble {bubble_class}">{text}</div>',
-            unsafe_allow_html=True,
-        )
-    st.markdown("</div>", unsafe_allow_html=True)
+    # ✅ Use a Streamlit container for chat history (scrolls naturally)
+    chat_box = st.container(height=520)
 
-    # Controls
-    mode = st.selectbox("Retrieval mode", ["vector", "hybrid"], index=0 if st.session_state.last_mode == "vector" else 1)
+    with chat_box:
+        for msg in st.session_state.messages:
+            role = msg.get("role", "assistant")
+            text = msg.get("text", "")
+            bubble_class = "user" if role == "user" else "assistant"
+            st.markdown(
+                f'<div class="bubble {bubble_class}">{text}</div>',
+                unsafe_allow_html=True,
+            )
+
+    # Controls BELOW chat (always clickable)
+    mode = st.selectbox(
+        "Retrieval mode",
+        ["vector", "hybrid"],
+        index=0 if st.session_state.last_mode == "vector" else 1,
+    )
     st.session_state.last_mode = mode
 
-    q = st.text_input("Ask a rehab question", value="What muscles does a squat strengthen?")
+    q = st.text_input(
+        "Ask a rehab question",
+        value="What muscles does a squat strengthen?",
+        key="query_input",
+    )
 
     colA, colB = st.columns([1, 1])
-    ask = colA.button("Ask")
-    clear = colB.button("Clear chat")
+    ask = colA.button("Ask", use_container_width=True)
+    clear = colB.button("Clear chat", use_container_width=True)
 
     if clear:
         st.session_state.messages = []
@@ -223,8 +198,8 @@ with left:
     if ask and q.strip():
         st.session_state.messages.append({"role": "user", "text": q.strip()})
 
-        # Typing animation placeholder
-        typing_placeholder = st.empty()
+        # typing animation
+        typing_placeholder = chat_box.empty()
         typing_placeholder.markdown(
             """
             <div class="bubble assistant">
@@ -247,7 +222,6 @@ with left:
             )
             st.rerun()
 
-        # Remove typing indicator
         typing_placeholder.empty()
 
         answer = data.get("answer", "")
@@ -256,14 +230,10 @@ with left:
 
         st.session_state.last_nodes = nodes
         st.session_state.last_edges = edges
-
         st.session_state.messages.append({"role": "assistant", "text": answer})
         st.rerun()
 
-    st.markdown(
-        f'<div class="muted">API_URL: <code>{API_URL}</code></div></div>',
-        unsafe_allow_html=True,
-    )
+    st.markdown(f'<div class="muted">API_URL: <code>{API_URL}</code></div></div>', unsafe_allow_html=True)
 
 with right:
     st.markdown(
@@ -304,4 +274,3 @@ with right:
         html = net.generate_html()
         components.html(html, height=700, scrolling=True)
         st.markdown("</div>", unsafe_allow_html=True)
-
