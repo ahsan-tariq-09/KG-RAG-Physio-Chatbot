@@ -83,7 +83,7 @@ This project aligns with contemporary research on **Graph-based Retrieval-Augmen
 KG-RAG-PHYSIO-CHATBOT/
 │
 ├── backend/
-│   ├── .venv/                     # Python virtual environment (local only)
+│   ├── .venv/                     # Python virtual environment (recommended to to be run in Python Virtual Environment)
 │   │
 │   ├── app/
 │   │   ├── main.py                # FastAPI entrypoint (starts the backend API)
@@ -94,7 +94,7 @@ KG-RAG-PHYSIO-CHATBOT/
 │   │       ├── neo4j_client.py    # Neo4j connection, driver, and queries
 │   │       └── graphrag_service.py# GraphRAG pipeline (retrieval + Gemini)
 │   │
-│   ├── .env.example               # Example env file (safe to commit)
+│   ├── .env.example               # Example env file 
 │   ├── list_models.py             # Utility script to list Gemini models
 │   
 │
