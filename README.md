@@ -67,7 +67,8 @@ Future development phases will include:
 - **Multimodal extensions**, such as:
   - CLIP-based exercise image embeddings  
   - BLIP-2 image captioning  
-- **Advanced retrieval strategies**, including FAISS-based similarity search  
+- **Advanced retrieval strategies**, including FAISS-based similarity search
+- **Stack Improvement** : make Backend python code more optimised and re-design frontend in React and Typescript  
 
 ---
 
