@@ -14,7 +14,7 @@ API_URL = (
     st.secrets.get("API_URL", None)
     if hasattr(st, "secrets")
     else None
-) or os.getenv("API_URL", "http://127.0.0.1:8000/query")
+) or os.getenv("API_URL", "http://127.0.0.1:8000/query") # fallback for local dev
 
 # -----------------------------
 # CSS
