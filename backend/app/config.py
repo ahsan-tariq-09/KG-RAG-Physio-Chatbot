@@ -11,14 +11,15 @@ class Settings(BaseModel):
     app_name: str = "KG-RAG Physio (Gemini)"
 
     # Neo4j
-    neo4j_uri: str = Field(default="bolt://localhost:7687")
-    neo4j_user: str = Field(default="neo4j")
-    neo4j_password: str = Field(default="password")
-    neo4j_database: str | None = Field(default=None)  # optional
+    neo4j_uri: str = Field(default_factory=lambda: os.getenv("NEO4J_URI", "bolt://localhost:7687"))
+    neo4j_user: str = Field(default_factory=lambda: os.getenv("NEO4J_USER", "neo4j"))
+    neo4j_password: str = Field(default_factory=lambda: os.getenv("NEO4J_PASSWORD", "password"))
+    neo4j_database: str | None = Field(default_factory=lambda: os.getenv("NEO4J_DATABASE"))
+
 
     # Gemini Developer API
-    gemini_api_key: str = Field(default="")  
-    gemini_model: str = Field(default="models/gemini-3-flash-preview")
+    gemini_api_key: str = Field(default_factory=lambda: os.getenv("GEMINI_API_KEY", ""))
+    gemini_model: str = Field(default_factory=lambda: os.getenv("GEMINI_MODEL", "gemini-3-flash-preview"))
 
 
     # Retrieval
