@@ -212,7 +212,7 @@ with left:
         )
 
         try:
-            resp = requests.post(API_URL, json={"query": q.strip(), "mode": mode}, timeout=60)
+            resp = requests.post(API_URL, json={"query": q.strip(), "mode": mode}, timeout=300)
             resp.raise_for_status()
             data = resp.json()
         except Exception as e:
