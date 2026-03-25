@@ -62,13 +62,11 @@ Key objectives include:
 
 Future development phases will include:
 
-- **Streamlit frontend** for interactive querying and graph visualization  
+- **Render frontend** for interactive querying and graph visualization (transition from StreamLit to Render) 
 - **Subgraph visualization** using NetworkX and PyVis  
 - **Multimodal extensions**, such as:
-  - CLIP-based exercise image embeddings  
-  - BLIP-2 image captioning  
-- **Advanced retrieval strategies**, including FAISS-based similarity search
-- **Stack Improvement** : make Backend python code more optimised and re-design frontend in React and Typescript  
+  - CLIP‑based static diagram embeddings 
+- **Stack Improvement** : make Backend python code more optimised and A TypeScript + React frontend will be added to visualise retrieved subgraphs and supporting images
 
 ---
 
