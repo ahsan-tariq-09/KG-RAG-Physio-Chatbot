@@ -1,0 +1,25 @@
+#-----------------------------Backend Dependencies-----------------------------#
+#These dependencies are required for running the backend server.
+fastapi
+uvicorn[standard]
+pydantic>=2
+python-dotenv
+
+neo4j
+neo4j-graphrag
+
+# open-source embeddings
+sentence-transformers
+
+# Gemini Developer API SDK
+google-genai
+
+#Neo4j GraphRAG requires Python ≥ 3.10.
+
+#-----------------------------Frontend (Visualization) Dependencies-----------------------------#
+#These dependencies are only required for running frontend tests.
+
+streamlit
+pyvis
+networkx
+requests
