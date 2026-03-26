@@ -82,31 +82,35 @@ This project aligns with contemporary research on **Graph-based Retrieval-Augmen
 KG-RAG-PHYSIO-CHATBOT/
 │
 ├── backend/
-│   ├── .venv/                     # Python virtual environment (recommended to to be run in Python Virtual Environment)
+│   ├── .venv/                          # Python virtual environment for local development
 │   │
 │   ├── app/
-│   │   ├── main.py                # FastAPI entrypoint (starts the backend API)
-│   │   ├── config.py              # Environment variables & app configuration
-│   │   ├── schemas.py             # Request/response data models (Pydantic)
+│   │   ├── main.py                     # FastAPI entry point
+│   │   ├── config.py                   # Environment variables and app configuration
+│   │   ├── schemas.py                  # Pydantic request/response schemas
 │   │   │
 │   │   └── services/
-│   │       ├── neo4j_client.py    # Neo4j connection, driver, and queries
-│   │       └── graphrag_service.py# GraphRAG pipeline (retrieval + Gemini)
+│   │       ├── neo4j_client.py         # Neo4j connection setup and graph queries
+│   │       └── graphrag_service.py     # KG-RAG retrieval and Gemini response pipeline
 │   │
-│   ├── .env.example               # Example env file 
-│   ├── list_models.py             # Utility script to list Gemini models
-│   
+│   ├── Testing Scripts/
+│   │   ├── gemini_smoke_test.py        # Gemini API connectivity test
+│   │   ├── list_models.py              # Utility to list available Gemini models
+│   │   └── test_connection.py          # Neo4j / backend connection test
+│   │
+│   ├── .env.example                    # Example environment variables file
+│   └── requirements.txt                # Backend Python dependencies
 │
 ├── frontend/
-│   ├── app.py                     # Streamlit frontend (graph + QA UI)
-│   └── README.md                  # Frontend usage notes
+│   ├── app.py                          # Streamlit frontend interface
+│   └── README.md                       # Frontend usage notes
 │
 ├── tests/
-│   ├── gemini_smoke_test.py       # Gemini API connectivity test
-│   └── test_smoke.py              # Basic backend sanity tests
+│   └── test_smoke.py                   # Basic backend smoke test(s)
 │
-├── .gitignore                     # Files Git should ignore (.env, .venv, etc.)
-├── LICENSE                        # Open-source license
-├── README.md                      # Project overview & setup instructions
-├── requirements.txt               # Combined frontend + backend dependencies
+├── .gitignore                          # Ignored files and folders (.env, .venv, caches, etc.)
+├── progress screenshots                # Progress Photos
+├── LICENSE                             # Open-source license
+├── README.md                           # Project overview, setup, and usage instructions
+└── requirements.txt                    # Combined project dependencies if kept at repo root
 ```
